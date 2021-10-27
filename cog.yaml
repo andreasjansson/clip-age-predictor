@@ -1,0 +1,31 @@
+# Configuration for Cog ⚙️
+# Reference: https://github.com/replicate/cog/blob/main/docs/yaml.md
+
+image: r8.im/andreasjansson/clip-age-predictor
+
+build:
+  # set to true if your model requires a GPU
+  gpu: true
+
+  # a list of ubuntu apt packages to install
+  system_packages:
+    - "libgl1-mesa-glx"
+    - "libglib2.0-0"
+
+  # python version in the form '3.8' or '3.8.12'
+  python_version: "3.8"
+
+  # a list of packages in the format <package-name>==<version>
+  python_packages:
+    - "git+https://github.com/openai/CLIP.git"
+    - "torch==1.8.0"
+    - "numpy==1.19.5"
+    - "pillow==8.3.2"
+
+  # commands run after the enviroment is setup
+  run:
+    # - "echo env is ready!"
+    # - "echo another command if needed"
+
+# predict.py defines how predictions are run on your model
+predict: "predict.py:Predictor"
