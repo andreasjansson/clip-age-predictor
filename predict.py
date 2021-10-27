@@ -6,6 +6,8 @@ import clip
 from PIL import Image
 import cog
 
+from util import compute_similarity
+
 AGES = list(range(1, 100))
 
 
@@ -28,12 +30,6 @@ class Predictor(cog.Predictor):
             image = self.preprocess(pil_image).unsqueeze(0).to(self.device)
             image_features = self.model.encode_image(image)
         image_features /= image_features.norm(dim=-1, keepdim=True)
-        similarity = (
-            (100.0 * image_features @ self.prompt_features.T)
-            .softmax(dim=-1)
-            .detach()
-            .cpu()
-            .numpy()
-        )
+        similarity = compute_similarity(image_features, self.prompt_features)
         age = AGES[np.argmax(similarity[0])]
         return f"CLIP thinks you are {age} years old"
